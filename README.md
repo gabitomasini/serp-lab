@@ -164,7 +164,7 @@ The project is preconfigured with:
 ## 👤 Author
 
 **Gabriela Tomasini**
-- Portfolio: [abrielatomasini.dev/](https://gabrielatomasini.dev/)
+- Portfolio: [gabrielatomasini.dev/](https://gabrielatomasini.dev/)
 - LinkedIn: [linkedin.com/in/gabriela-tomasini-88276553](https://www.linkedin.com/in/gabriela-tomasini-88276553/)
 - GitHub: [@gabitomasini](https://github.com/gabitomasini)
 
