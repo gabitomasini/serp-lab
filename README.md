@@ -164,7 +164,7 @@ The project is preconfigured with:
 ## 👤 Author
 
 **Gabriela Tomasini**
-- Portfolio: [gabitomasini.com](https://gabriela-tomasini-page.vercel.app/)
+- Portfolio: [abrielatomasini.dev/](https://gabrielatomasini.dev/)
 - LinkedIn: [linkedin.com/in/gabriela-tomasini-88276553](https://www.linkedin.com/in/gabriela-tomasini-88276553/)
 - GitHub: [@gabitomasini](https://github.com/gabitomasini)
 
