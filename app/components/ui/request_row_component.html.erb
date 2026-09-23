@@ -1,0 +1,39 @@
+<tr class="border-b border-slate-800/60 hover:bg-slate-800/30 transition-colors group">
+  <!-- Status badge -->
+  <td class="px-4 py-3 whitespace-nowrap">
+    <%= render Ui::BadgeComponent.new(variant: :status, value: request.status_code) %>
+  </td>
+
+  <!-- Engine -->
+  <td class="px-4 py-3 whitespace-nowrap">
+    <%= render Ui::BadgeComponent.new(variant: :engine, value: request.engine) %>
+  </td>
+
+  <!-- Country -->
+  <td class="px-4 py-3 whitespace-nowrap">
+    <span class="px-2 py-0.5 rounded text-[11px] font-mono uppercase bg-slate-800 text-slate-300 border border-slate-700">
+      <%= request.country %>
+    </span>
+  </td>
+
+  <!-- Query -->
+  <td class="px-4 py-3 max-w-xs md:max-w-md truncate">
+    <div class="flex items-center gap-2">
+      <span class="font-mono text-xs text-slate-200 group-hover:text-indigo-300 transition-colors font-medium truncate">
+        <%= request.query %>
+      </span>
+    </div>
+  </td>
+
+  <!-- Latency -->
+  <td class="px-4 py-3 whitespace-nowrap font-mono text-xs">
+    <span class="px-2 py-0.5 rounded border text-[11px] font-medium <%= latency_class %>">
+      <%= request.latency_label %>
+    </span>
+  </td>
+
+  <!-- Timestamp -->
+  <td class="px-4 py-3 whitespace-nowrap font-mono text-xs text-slate-400 text-right">
+    <%= formatted_time %>
+  </td>
+</tr>

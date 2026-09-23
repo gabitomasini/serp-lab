@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" class="dark h-full">
+  <head>
+    <title><%= content_for(:title) || "Serp Lab — Console" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Serp Lab Console: High-performance developer console for search engine API queries.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Serp Lab">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <!-- Fonts: Inter + JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-[#09090b] text-[#fafafa] h-full flex flex-col font-sans antialiased overflow-hidden selection:bg-blue-500/30 selection:text-blue-200">
+    <!-- Top Navigation Bar (56px) -->
+    <nav class="h-14 border-b border-[#27272a] bg-[#09090b] flex items-center px-5 gap-6 shrink-0 z-30">
+      <!-- Logo & Breadcrumbs -->
+      <div class="flex items-center gap-2 mr-2">
+        <%= link_to root_path, class: "font-mono text-sm font-medium text-[#fafafa] tracking-tight hover:opacity-90" do %>
+          Serp Lab
+        <% end %>
+        <span class="text-[#3f3f46]">/</span>
+        <span class="font-mono text-sm text-[#a1a1aa]">Console</span>
+        <span class="bg-[#18181b] border border-[#27272a] text-[#71717a] text-[10px] px-1.5 py-0.5 rounded font-mono ml-1">
+          Production (v1)
+        </span>
+      </div>
+
+      <!-- App Navigation Links -->
+      <div class="hidden md:flex items-center gap-1 font-mono text-xs ml-2">
+        <%= link_to playground_path,
+              class: "px-3 py-1.5 rounded-md transition-colors #{current_page?(root_path) || current_page?(playground_path) ? 'bg-[#18181b] text-[#fafafa] border border-[#27272a]' : 'text-[#71717a] hover:text-[#fafafa]'}" do %>
+          Playground
+        <% end %>
+        <%= link_to requests_path,
+              class: "px-3 py-1.5 rounded-md transition-colors #{current_page?(requests_path) ? 'bg-[#18181b] text-[#fafafa] border border-[#27272a]' : 'text-[#71717a] hover:text-[#fafafa]'}" do %>
+          Request Log
+        <% end %>
+      </div>
+
+      <div class="flex-1"></div>
+
+      <!-- Docs Link -->
+      <a href="#" class="text-[#71717a] text-xs hover:text-zinc-300 transition-colors">
+        Docs
+      </a>
+
+      <!-- Quota Badge -->
+      <div class="flex items-center gap-2 text-[11px]">
+        <div class="bg-[#18181b] border border-[#27272a] rounded-md px-2.5 py-1 flex items-center gap-2">
+          <span class="font-mono text-[#fafafa]">24,850 / 50,000</span>
+          <span class="text-[#52525b]">requests</span>
+          <div class="w-12 h-1 bg-[#27272a] rounded-sm overflow-hidden">
+            <div class="w-[50%] h-full bg-[#f59e0b] rounded-sm"></div>
+          </div>
+          <span class="font-mono text-[#f59e0b]">50%</span>
+        </div>
+      </div>
+
+      <!-- Profile Avatar & Dropdown (Native <details>) -->
+      <details class="relative">
+        <summary class="flex items-center gap-1.5 cursor-pointer list-none hover:opacity-80 transition-opacity">
+          <div class="w-7 h-7 rounded-full bg-gradient-to-br from-[#3b82f6] to-[#6366f1] flex items-center justify-center text-[11px] font-semibold text-white">
+            AS
+          </div>
+          <svg class="w-3 h-3 text-[#71717a]" viewBox="0 0 12 12" fill="none">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </summary>
+
+        <div class="absolute right-0 top-9 w-48 z-50 bg-[#18181b] border border-[#27272a] rounded-lg py-1 shadow-2xl">
+          <div class="px-3.5 py-2.5 border-b border-[#27272a]">
+            <div class="text-[#fafafa] text-xs font-medium">Alex Sinclair</div>
+            <div class="text-[#71717a] text-[11px]">alex@company.io</div>
+          </div>
+          <button
+            type="button"
+            onclick="document.getElementById('api-keys-dialog').showModal()"
+            class="w-full text-left px-3.5 py-1.5 text-xs text-[#a1a1aa] hover:bg-zinc-800 transition-colors cursor-pointer"
+          >
+            API Keys
+          </button>
+          <button
+            type="button"
+            class="w-full text-left px-3.5 py-1.5 text-xs text-[#a1a1aa] hover:bg-zinc-800 transition-colors cursor-pointer"
+          >
+            Settings
+          </button>
+          <button
+            type="button"
+            class="w-full text-left px-3.5 py-1.5 text-xs text-red-500 hover:bg-zinc-800 transition-colors cursor-pointer"
+          >
+            Sign out
+          </button>
+        </div>
+      </details>
+    </nav>
+
+    <!-- Main Content View Area -->
+    <main class="flex-1 flex flex-col min-h-0 w-full overflow-hidden">
+      <%= yield %>
+    </main>
+
+    <!-- Native HTML5 Dialog: API Keys Modal -->
+    <dialog
+      id="api-keys-dialog"
+      data-controller="dialog"
+      data-action="click->dialog#clickOutside"
+      class="m-auto rounded-xl bg-[#18181b] border border-[#27272a] p-0 text-[#fafafa] shadow-2xl max-w-lg w-full"
+    >
+      <div class="p-6 space-y-6">
+        <!-- Dialog Header -->
+        <div class="flex items-center justify-between pb-4 border-b border-[#27272a]">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+              </svg>
+            </div>
+            <div>
+              <h3 class="text-sm font-semibold text-[#fafafa] tracking-tight">API Authentication</h3>
+              <p class="text-[11px] text-[#71717a]">Your Serp Lab developer access keys</p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            data-action="click->dialog#close"
+            class="text-[#71717a] hover:text-[#fafafa] p-1 rounded hover:bg-zinc-800 transition cursor-pointer"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Dialog Body -->
+        <div class="space-y-4">
+          <!-- Production Live Key -->
+          <div class="p-3.5 rounded-lg bg-[#09090b] border border-[#27272a] space-y-2" data-controller="clipboard">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-[#10b981] font-medium">LIVE PRODUCTION KEY</span>
+              <span class="text-[10px] font-mono text-[#71717a]">Full Access</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <input
+                type="text"
+                readonly
+                data-clipboard-target="source"
+                value="sk_live_serplab_94a8e23fc197b489d"
+                class="w-full px-2.5 py-1.5 rounded bg-[#18181b] border border-[#27272a] text-xs font-mono text-[#fafafa] select-all outline-none"
+              />
+              <button
+                type="button"
+                data-action="click->clipboard#copy"
+                data-clipboard-target="button"
+                class="px-3 py-1.5 rounded bg-[#27272a] hover:bg-zinc-700 text-[#fafafa] text-xs font-mono transition cursor-pointer shrink-0"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+
+          <!-- Sandbox Test Key -->
+          <div class="p-3.5 rounded-lg bg-[#09090b] border border-[#27272a] space-y-2" data-controller="clipboard">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono text-[#f59e0b] font-medium">TEST SANDBOX KEY</span>
+              <span class="text-[10px] font-mono text-[#71717a]">Rate Limited (429 testing)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <input
+                type="text"
+                readonly
+                data-clipboard-target="source"
+                value="sk_test_serplab_11b7d50a49c23f18e"
+                class="w-full px-2.5 py-1.5 rounded bg-[#18181b] border border-[#27272a] text-xs font-mono text-[#fafafa] select-all outline-none"
+              />
+              <button
+                type="button"
+                data-action="click->clipboard#copy"
+                data-clipboard-target="button"
+                class="px-3 py-1.5 rounded bg-[#27272a] hover:bg-zinc-700 text-[#fafafa] text-xs font-mono transition cursor-pointer shrink-0"
+              >
+                Copy
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dialog Footer -->
+        <div class="pt-4 border-t border-[#27272a] flex justify-end">
+          <button
+            type="button"
+            data-action="click->dialog#close"
+            class="px-4 py-1.5 rounded-md bg-[#10b981] hover:bg-[#059669] text-white text-xs font-medium transition cursor-pointer"
+          >
+            Done
+          </button>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>

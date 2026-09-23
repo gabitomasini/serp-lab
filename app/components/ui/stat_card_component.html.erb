@@ -1,0 +1,40 @@
+<div class="p-4 rounded-xl bg-slate-900/70 border border-slate-800/80 hover:border-slate-700/80 transition-all duration-200 shadow-sm backdrop-blur-xs">
+  <div class="flex items-center justify-between">
+    <span class="text-xs font-medium uppercase tracking-wider text-slate-400"><%= title %></span>
+    <% if icon %>
+      <div class="w-7 h-7 rounded-lg bg-slate-800/60 border border-slate-700/50 flex items-center justify-center text-slate-400">
+        <% case icon.to_sym %>
+        <% when :clock %>
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        <% when :activity %>
+          <svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        <% when :server %>
+          <svg class="w-4 h-4 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2" />
+          </svg>
+        <% else %>
+          <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+          </svg>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mt-2 flex items-baseline gap-2">
+    <span class="text-2xl font-bold font-mono tracking-tight text-white"><%= value %></span>
+    <% if trend %>
+      <span class="text-xs font-mono font-medium <%= trend_positive ? 'text-emerald-400' : 'text-amber-400' %>">
+        <%= trend %>
+      </span>
+    <% end %>
+  </div>
+
+  <% if subtext %>
+    <p class="mt-1 text-xs text-slate-400/90 font-mono"><%= subtext %></p>
+  <% end %>
+</div>
