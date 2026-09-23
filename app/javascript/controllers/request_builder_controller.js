@@ -1,10 +1,63 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["engineRadio", "queryInput", "countrySelect", "curlCode", "nodeCode", "pythonCode"]
+  static targets = [
+    "engineRadio",
+    "queryInput",
+    "countrySelect",
+    "curlCode",
+    "nodeCode",
+    "pythonCode",
+    "submitButton",
+    "spinner",
+    "buttonText",
+    "loadingBar"
+  ]
 
   connect() {
     this.updateSnippets()
+  }
+
+  submitStart() {
+    if (this.hasSubmitButtonTarget) {
+      this.submitButtonTarget.disabled = true
+      this.submitButtonTarget.classList.add("bg-[#064e3b]", "cursor-not-allowed", "opacity-80")
+      this.submitButtonTarget.classList.remove("bg-[#10b981]", "hover:bg-[#059669]", "cursor-pointer")
+    }
+    if (this.hasSpinnerTarget) {
+      this.spinnerTarget.classList.remove("hidden")
+    }
+    if (this.hasButtonTextTarget) {
+      this.buttonTextTarget.textContent = "Sending…"
+    }
+    if (this.hasLoadingBarTarget) {
+      this.loadingBarTarget.classList.remove("hidden")
+    }
+    const frame = document.getElementById("playground_results")
+    if (frame) {
+      frame.classList.add("opacity-50", "pointer-events-none", "transition-opacity", "duration-200")
+    }
+  }
+
+  submitEnd() {
+    if (this.hasSubmitButtonTarget) {
+      this.submitButtonTarget.disabled = false
+      this.submitButtonTarget.classList.remove("bg-[#064e3b]", "cursor-not-allowed", "opacity-80")
+      this.submitButtonTarget.classList.add("bg-[#10b981]", "hover:bg-[#059669]", "cursor-pointer")
+    }
+    if (this.hasSpinnerTarget) {
+      this.spinnerTarget.classList.add("hidden")
+    }
+    if (this.hasButtonTextTarget) {
+      this.buttonTextTarget.textContent = "Send Request"
+    }
+    if (this.hasLoadingBarTarget) {
+      this.loadingBarTarget.classList.add("hidden")
+    }
+    const frame = document.getElementById("playground_results")
+    if (frame) {
+      frame.classList.remove("opacity-50", "pointer-events-none")
+    }
   }
 
   engineChanged() {
